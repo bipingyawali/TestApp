@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IpRequest;
 use App\Models\Ip;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Laracasts\Flash\Flash;
 
 class IpController extends Controller
@@ -11,9 +14,10 @@ class IpController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index(){
+    public function index(): View
+    {
         $data['ips'] = Ip::all();
         return view('ip.index',$data);
     }
@@ -21,20 +25,21 @@ class IpController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create(){
+    public function create(): View
+    {
         $data['current_ip'] = request()->ip();
         return view('ip.create',$data);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  IpRequest $request
-     * @return \Illuminate\Http\Response
+     * @param IpRequest $request
+     * @return RedirectResponse
      */
-    public function store(IpRequest $request){
+    public function store(IpRequest $request): RedirectResponse
+    {
         $ip = $request->ip; //or any other IP here
         $s = file_get_contents('http://ip2c.org/'.$ip);
         switch($s[0])
